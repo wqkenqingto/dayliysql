@@ -26,11 +26,13 @@ where
  #承运商公司
  select wb.waybill_number,dpn.longitude,dpn.latitude ,cc.carrier_name from waybill wb
 join section_trip st on (st.waybill_id=wb.id)
-join delivery_order dorder on(dorder.id=doc.deliveryorder_id)
-join delivery_point_new dpn on(replace(bo.station_id,"-","")=dpn.id )
-join delivery_order_carriers doc on (doc.cooperativecarrier_id=cc.id)
 join company com on (com.id=bo.company_id)
 join cooperative_carrier cc on (cc.company_id=com.id)
+join delivery_order dorder on(dorder.id=doc.deliveryorder_id)
+join delivery_order_carriers doc on (doc.cooperativecarrier_id=cc.id)
+join delivery_point_new dpn on(replace(bo.station_id,"-","")=dpn.id )
+
+
 join weight_note wn on (wn.section_trip_id=st.id)
 where
 audit_datetime between'2018-10-01 00:00:00' and '2018-12-01 15:08:44' 

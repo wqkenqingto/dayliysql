@@ -33,11 +33,12 @@ select * from waybill where waybill_number='TE1810110002'
 
 ##1.基础贸易信息分析：以时间为维度下，基础业务数据概览	
 	##业务单,运单
-select  count(distinct bo.order_number)业务单量,count(waybill_id)运单量 from waybill wb 
+select count(distinct bo.order_number)业务单量,count(waybill_id)运单量 from waybill wb 
 	left join section_trip st on (st.waybill_id=wb.id) 
 	left join business_order bo on(bo.id=st.business_order_id) #业务单 
 		where 
-	bo.status="finished" and wb.is_deleted=0 
+	bo.status="finished" and wb.is_deleted=0
+
 	
 	##业务单,运单,周活跃
 select count(distinct bo.order_number)业务单量,count(waybill_id)运单量,count(distinct bo.consumer_id) 周活跃客户数 from waybill wb 
@@ -49,7 +50,7 @@ select count(distinct bo.order_number)业务单量,count(waybill_id)运单量,co
 	
 
 #客户数
-select count(*) 客户总数 from consumer;
+select count(*) from consumer;
 
 #业务量
 select sum(actual_quantity)业务量 from business_order;	
@@ -91,7 +92,7 @@ select cc.carrier_name, count( distinct waybill_number) from waybill wb
  
  	#业务单总量、外销单量、占比、环比增量；卸货地/客户区域分析
  	#销售单价 销售总额
- 	select consumer_name,min(unit_price),max(unit_price) from business_order bo 
+ 	select consumer_name,unit_price,total_price from business_order bo 
  	group by consumer_name;
  	
  	#销售总额
@@ -141,31 +142,8 @@ select cc.carrier_name, count( distinct waybill_number) from waybill wb
 	
 	##3托运客户分析：（时间维度下发生的运单数总和，运单数为平台和线下的总和）
 		
-	select count(wb.id)  from waybill wb join 
-	logistic_statistic ls on (replace(ls.waybill_id,"-","")=wb.id)
-	group by company_id
-	 
-	 ##4物流运输成本费用合计
-	 
-	 
-	 
-	select * from company where id='9484885e877242e48da28dbc318a93e4'
-	#基础业务概览(业务单、采购单、运单筛选维度均为BPM下的平台运单)
-	select wbb.业务单量,wbb.运单量,obw.外销单数,boo.业务量,wbb.周活跃客户数,conn.客户总数  from 
-	(
-	##业务单,运单,周活跃
-select count(distinct bo.order_number)业务单量,count(waybill_id)运单量,count(distinct bo.consumer_id) 周活跃客户数 from waybill wb 
-	left join section_trip st on (st.waybill_id=wb.id) 
-	left join business_order bo on(bo.id=st.business_order_id) #业务单 
-		where 
-	bo.status="finished" and wb.is_deleted=0	
-	) as wbb,(
-	#外销
-select sum(actual_quantity)业务量 from business_order)as boo,
-(select count(*) 客户总数 from consumer)
-	as conn,
-(select count(*) 外销单数 from out_buy_waybill
- )	as obw
- 
- 
- 
+	###TMS
+select road_toll_com 过路费, maintenance_cost 维修费 from income_statistic ;
+
+##支出金额分类占比（油气费、维修费用等）
+select sum(actual_mile) 实际里程,sum(waiting_charges)运费总额,sum(waiting_charges)/sum(actual_mile) 单公里运费,""单公里成本 from logistic_statistic
