@@ -169,3 +169,189 @@ select sum(actual_quantity)业务量 from business_order)as boo,
  
  
  
+  ##采购量,业务量,外采量
+ select dordern.计划采购量,boo.业务量,obw.外采量,oso.外销量 from
+ (select sum(`plan_tonnage`) 计划采购量 from waybill wb 
+ join delivery_order dorder on(wb.delivery_order_id=dorder.id)
+ )as dordern,
+ (
+ select sum(actual_quantity)业务量 from waybill wb
+join section_trip st on (st.waybill_id=wb.id)
+join business_order bo on(bo.id=st.business_order_id)
+) as boo,
+(
+select sum(actual_quantity)外采量 from out_buy_waybill
+)as obw,
+(
+select sum(actual_quantity) 外销量 from out_sale_order
+)as oso
+
+ select sum(active_tonnage) from section_trip
+ where 
+ created_at >"2018-12-10 00:00:00 " and created_at <"2018-12-15  23:59:59"  
+	and section_type="pickup" 
+ 
+ 
+ 
+##采购量,业务量,外采量
+ select dordern.采购量,boo.业务量,obw.外采量,oso.外销量 from
+ (
+ select sum(active_tonnage)采购量 from section_trip
+ where 
+ created_at >"2018-12-03  00:00:00 " and created_at <"2018-12-08  23:59:59"  
+	and section_type="pickup" 
+
+ )as dordern,
+ (
+ select sum(actual_quantity)业务量 from business_order
+where created_at >"2018-12-03  00:00:00 " and created_at <"2018-12-08  23:59:59"
+
+) as boo,
+(
+select sum(actual_quantity)外采量 from out_buy_waybill
+where start_time >"2018-12-03  00:00:00 " and start_time <"2018-12-08  23:59:59"
+)as obw,
+(
+select sum(actual_quantity) 外销量 from out_sale_order
+where created_at >"2018-12-03  00:00:00 " and created_at <"2018-12-08  23:59:59"
+)as oso
+
+
+#2.客户价值维度下的对比分析：以客户为维度
+#客户-业务量分析
+select bo.consumer_name,count(distinct order_number) from business_order bo
+join consumer con on (con.id=bo.consumer_id)
+where
+bo.created_at >"2018-12-03  00:00:00 " and bo.created_at <"2018-12-08  23:59:59"  
+group by consumer_id
+
+
+select count(distinct consumer.id) 客户总数 from consumer  
+join business_order bo on (bo.consumer_id=consumer.id)
+join company com on (com.id=bo.company_id)
+where
+ consumer.created_at <"2018-12-08 23:59:59" and com.company_name ="龙口胜通能源有限公司"
+
+select * from company where company_name like "%龙口%"
+
+
+select count(*) 外销单数 from out_sale_order oso
+join company com on (com.id=oso.company_id)
+where  oso.created_at >"2018-12-03  00:00:00 " and oso.created_at <"2018-12-08  23:59:59"
+
+
+ select count(*)运单数 from waybill  wb
+ join section_trip st on(st.waybill_id=wb.id)
+ join business_order bo on(bo.id=st.business_order_id)
+ join company com on (com.id=bo.company_id)
+ where wb.start_time>="2018-12-03  00:00:00"  and wb.start_time <="2018-12-15 23:59:59"  and wb.is_deleted=0 and com.company_name="龙口胜通能源有限公司"
+ 
+ 
+ select count(*) 采购单量 from section_trip  st
+  	join business_order bo on(bo.id=st.business_order_id)
+ 	join company com on (com.id=bo.company_id)
+ 	
+	where 
+	st.created_at >"2018-12-03  00:00:00 " and st.created_at <"2018-12-08  23:59:59"  
+	and st.section_type="unload"  and com.company_name="龙口胜通能源有限公司"
+	
+	
+	
+	
+#基础业务概览(业务单、采购单、运单筛选维度均为BPM下的平台运单)
+	select  delivery.采购单量,  boo.业务单量,waybbb.运单数,obw.外采单数,osr.外销单数,boo.周活跃客户数,conn.客户总数  from 
+	(
+	#外销
+select count(distinct bo.order_number)业务单量,count(distinct bo.consumer_id) 周活跃客户数  from business_order bo
+join company com on (com.id=bo.company_id)
+where bo.is_deleted=0 and bo.created_at >"2018-12-03  00:00:00 " and bo.created_at <"2018-12-08  23:59:59"
+and com.company_name ="龙口胜通能源有限公司"
+)as boo,
+(
+select count(distinct consumer.id) 客户总数 from consumer  
+join business_order bo on (bo.consumer_id=consumer.id)
+join company com on (com.id=bo.company_id)
+where
+ consumer.created_at <"2018-12-08 23:59:59" and com.company_name ="龙口胜通能源有限公司"
+)	as conn,
+(
+select count(*) 外销单数 from out_sale_order oso
+join company com on (com.id=oso.company_id)
+where  oso.created_at >"2018-12-03  00:00:00 " and oso.created_at <"2018-12-08  23:59:59"
+ )	as osr,
+ (
+ select count(*)运单数 from waybill  wb
+ join section_trip st on(st.waybill_id=wb.id)
+ join business_order bo on(bo.id=st.business_order_id)
+ join company com on (com.id=bo.company_id)
+ where wb.start_time>="2018-12-03  00:00:00"  and wb.start_time <="2018-12-08 23:59:59"  and wb.is_deleted=0 and com.company_name="龙口胜通能源有限公司"
+ )as waybbb,
+ (
+ select count(*) 采购单量 from section_trip  st
+  	join business_order bo on(bo.id=st.business_order_id)
+ 	join company com on (com.id=bo.company_id)
+ 	
+	where 
+	st.created_at >"2018-12-03  00:00:00 " and st.created_at <"2018-12-08  23:59:59"  
+	and st.section_type="unload"  and com.company_name="龙口胜通能源有限公司"
+ 
+ )as delivery,
+ (
+ select count(*) 外采单数 from out_buy_waybill obw
+ join company com on(com.id=obw.company_id)
+ where start_time >"2018-12-03  00:00:00 " and start_time <"2018-12-08  23:59:59"  
+ )as obw
+ 
+ 
+ 
+ 
+ #基础业务概览(业务单、采购单、运单筛选维度均为BPM下的平台运单)
+	select  delivery.采购单量,  boo.业务单量,waybbb.运单数,obw.外采单数,osr.外销单数,boo.周活跃客户数,conn.客户总数  from
+	(
+	#外销
+select count(distinct bo.order_number)业务单量,count(distinct bo.consumer_id) 周活跃客户数  from business_order bo
+join company com on (com.id=bo.company_id)
+where bo.is_deleted=0 and bo.created_at >"2018-12-10  00:00:00 " and bo.created_at <"2018-12-15  23:59:59"
+and com.company_name ="龙口胜通能源有限公司"
+)as boo,
+(
+select count(distinct consumer.id) 客户总数 from consumer
+join business_order bo on (bo.consumer_id=consumer.id)
+join company com on (com.id=bo.company_id)
+where
+ consumer.created_at <"2018-12-08 23:59:59" and com.company_name ="龙口胜通能源有限公司"
+)	as conn,
+(
+select count(*) 外销单数 from out_sale_order oso
+join company com on (com.id=oso.company_id)
+where  oso.created_at >"2018-12-10  00:00:00 " and oso.created_at <"2018-12-15  23:59:59"
+ )	as osr,
+ (
+ select count(*)运单数 from waybill  wb
+ join section_trip st on(st.waybill_id=wb.id)
+ join business_order bo on(bo.id=st.business_order_id)
+ join company com on (com.id=bo.company_id)
+ where wb.start_time>="2018-12-10  00:00:00"  and wb.start_time <="2018-12-08 23:59:59"  and wb.is_deleted=0 and com.company_name="龙口胜通能源有限公司"
+ )as waybbb,
+ (
+ select count(*) 采购单量 from section_trip  st
+  	join business_order bo on(bo.id=st.business_order_id)
+ 	join company com on (com.id=bo.company_id)
+
+	where
+	st.created_at >"2018-12-10  00:00:00 " and st.created_at <"2018-12-15  23:59:59"
+	and st.section_type="unload"  and com.company_name="龙口胜通能源有限公司"
+
+ )as delivery,
+ (
+ select count(*) 外采单数 from out_buy_waybill obw
+ join company com on(com.id=obw.company_id)
+ where start_time >"2018-12-10  00:00:00 " and start_time <"2018-12-15  23:59:59"
+ )as obw
+
+
+
+  select sum(`plan_tonnage`) 计划采购量 from waybill wb
+join business_order bo on(bo.id=st.business_order_id)
+join company com on (com.id=bo.company_id)
+  join delivery_order dorder on(wb.delivery_order_id=dorder.id)
