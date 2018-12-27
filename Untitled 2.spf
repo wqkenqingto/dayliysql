@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>ContentFilters</key>
+	<dict/>
+	<key>auto_connect</key>
+	<true/>
+	<key>data</key>
+	<dict>
+		<key>connection</key>
+		<dict>
+			<key>host</key>
+			<string>rm-hp3v6495fk7x44j74vo.mysql.huhehaote.rds.aliyuncs.com</string>
+			<key>kcid</key>
+			<string>2520511066293166728</string>
+			<key>name</key>
+			<string>ali</string>
+			<key>rdbms_type</key>
+			<string>mysql</string>
+			<key>sslCACertFileLocation</key>
+			<string></string>
+			<key>sslCACertFileLocationEnabled</key>
+			<integer>0</integer>
+			<key>sslCertificateFileLocation</key>
+			<string></string>
+			<key>sslCertificateFileLocationEnabled</key>
+			<integer>0</integer>
+			<key>sslKeyFileLocation</key>
+			<string></string>
+			<key>sslKeyFileLocationEnabled</key>
+			<integer>0</integer>
+			<key>type</key>
+			<string>SPTCPIPConnection</string>
+			<key>useSSL</key>
+			<integer>0</integer>
+			<key>user</key>
+			<string>pro_read_admin</string>
+		</dict>
+		<key>session</key>
+		<dict>
+			<key>connectionEncoding</key>
+			<string>utf8</string>
+			<key>contentPageNumber</key>
+			<integer>1</integer>
+			<key>contentSelection</key>
+			<data>
+			YnBsaXN0MDDUAQIDBAUGJSZYJHZlcnNpb25YJG9iamVjdHNZJGFy
+			Y2hpdmVyVCR0b3ASAAGGoKgHCBMUFRYaIVUkbnVsbNMJCgsMDxJX
+			TlMua2V5c1pOUy5vYmplY3RzViRjbGFzc6INDoACgAOiEBGABIAF
+			gAdUdHlwZVRyb3dzXxAdU2VsZWN0aW9uRGV0YWlsVHlwZU5TSW5k
+			ZXhTZXTSFwsYGVxOU1JhbmdlQ291bnQQAIAG0hscHR5aJGNsYXNz
+			bmFtZVgkY2xhc3Nlc1pOU0luZGV4U2V0oh8gWk5TSW5kZXhTZXRY
+			TlNPYmplY3TSGxwiI1xOU0RpY3Rpb25hcnmiIiRYTlNPYmplY3Rf
+			EA9OU0tleWVkQXJjaGl2ZXLRJyhUZGF0YYABAAgAEQAaACMALQAy
+			ADcAQABGAE0AVQBgAGcAagBsAG4AcQBzAHUAdwB8AIEAoQCmALMA
+			tQC3ALwAxwDQANsA3gDpAPIA9wEEAQcBEAEiASUBKgAAAAAAAAIB
+			AAAAAAAAACkAAAAAAAAAAAAAAAAAAAEs
+			</data>
+			<key>contentSortColIsAsc</key>
+			<true/>
+			<key>contentViewport</key>
+			<string>{{0, 0}, {694, 448}}</string>
+			<key>isToolbarVisible</key>
+			<true/>
+			<key>queries</key>
+			<string>##1、采购额、采购单量和采购吨位的分布（按液厂/省/月份）
+select  sum(unit_sum_price), sum(discounts_sum_price),count(distinct waybill),sum(active_tonnage) ,actual_fluid_name,province,month(active_time)
+from (
+select unit_sum_price ,discounts_sum_price, waybill,active_tonnage,active_time,actual_fluid_name,province  from `procurement_statistic` ps
+join actual_fluid af on (af.id=replace(ps.fluid_id,"-",""))
+join coordinate coor on (af.coordinate_id=coor.id)
+union all
+select unit_sum_price ,discounts_sum_price, waybill,active_tonnage,active_time,actual_fluid_name,province  from `procurement_statistic` ps
+join fluid on (fluid.id=replace(ps.fluid_id,"-",""))
+join `actual_fluid` af on (af.id=fluid.actual_fluid_id)
+join coordinate coor on (af.coordinate_id=coor.id)
+) pss
+group by actual_fluid_name ,province,month(active_time)
+order by actual_fluid_name ,month(active_time)
+
+
+ss</string>
+			<key>view</key>
+			<string>SP_VIEW_CUSTOMQUERY</string>
+			<key>windowVerticalDividerPosition</key>
+			<real>279</real>
+		</dict>
+	</dict>
+	<key>encrypted</key>
+	<false/>
+	<key>format</key>
+	<string>connection</string>
+	<key>queryFavorites</key>
+	<array/>
+	<key>queryHistory</key>
+	<array>
+		<string>select  sum(unit_sum_price), sum(discounts_sum_price),count(distinct waybill),sum(active_tonnage) ,actual_fluid_name,province,month(active_time)
+from (
+select unit_sum_price ,discounts_sum_price, waybill,active_tonnage,active_time,actual_fluid_name,province  from `procurement_statistic` ps
+join actual_fluid af on (af.id=replace(ps.fluid_id,"-",""))
+join coordinate coor on (af.coordinate_id=coor.id)
+union all
+select unit_sum_price ,discounts_sum_price, waybill,active_tonnage,active_time,actual_fluid_name,province  from `procurement_statistic` ps
+join fluid on (fluid.id=replace(ps.fluid_id,"-",""))
+join `actual_fluid` af on (af.id=fluid.actual_fluid_id)
+join coordinate coor on (af.coordinate_id=coor.id)
+) pss
+group by actual_fluid_name ,province,month(active_time)
+order by actual_fluid_name ,month(active_time)</string>
+		<string>select  sum(unit_sum_price), sum(discounts_sum_price),count(distinct waybill),sum(active_tonnage) ,actual_fluid_name,province,month(active_time)
+from (
+select unit_sum_price ,discounts_sum_price, waybill,active_tonnage,active_time,actual_fluid_name,province  from `procurement_statistic` ps
+join actual_fluid af on (af.id=replace(ps.fluid_id,"-",""))
+join coordinate coor on (af.coordinate_id=coor.id)
+union all
+select unit_sum_price ,discounts_sum_price, waybill,active_tonnage,active_time,actual_fluid_name,province  from `procurement_statistic` ps
+join fluid on (fluid.id=replace(ps.fluid_id,"-",""))
+join `actual_fluid` af on (af.id=fluid.actual_fluid_id)
+join coordinate coor on (af.coordinate_id=coor.id)
+) pss
+group by actual_fluid_name ,province,month(active_time)
+order by actual_fluid_name</string>
+		<string>select  sum(unit_sum_price), sum(discounts_sum_price),count(distinct waybill),sum(active_tonnage) ,actual_fluid_name,province,month(active_time)
+from (
+select unit_sum_price ,discounts_sum_price, waybill,active_tonnage,active_time,actual_fluid_name,province  from `procurement_statistic` ps
+join actual_fluid af on (af.id=replace(ps.fluid_id,"-",""))
+join coordinate coor on (af.coordinate_id=coor.id)
+union all
+select unit_sum_price ,discounts_sum_price, waybill,active_tonnage,active_time,actual_fluid_name,province  from `procurement_statistic` ps
+join fluid on (fluid.id=replace(ps.fluid_id,"-",""))
+join `actual_fluid` af on (af.id=fluid.actual_fluid_id)
+join coordinate coor on (af.coordinate_id=coor.id)
+) pss
+group by actual_fluid_name ,province,month(active_time)
+order by month(active_time)</string>
+		<string>select  sum(unit_sum_price), sum(discounts_sum_price),count(distinct waybill),sum(active_tonnage) ,actual_fluid_name,province,month(active_time)
+from (
+select unit_sum_price ,discounts_sum_price, waybill,active_tonnage,active_time,actual_fluid_name,province  from `procurement_statistic` ps
+join actual_fluid af on (af.id=replace(ps.fluid_id,"-",""))
+join coordinate coor on (af.coordinate_id=coor.id)
+union all
+select unit_sum_price ,discounts_sum_price, waybill,active_tonnage,active_time,actual_fluid_name,province  from `procurement_statistic` ps
+join fluid on (fluid.id=replace(ps.fluid_id,"-",""))
+join `actual_fluid` af on (af.id=fluid.actual_fluid_id)
+join coordinate coor on (af.coordinate_id=coor.id)
+) pss
+group by actual_fluid_name ,province,month(active_time)</string>
+		<string>select  sum(unit_sum_price), sum(discounts_sum_price),count(distinct waybill),sum(active_tonnage) ,actual_fluid_name,province,month(active_time)
+from (
+select unit_sum_price ,discounts_sum_price, waybill,active_tonnage,active_time,actual_fluid_name,province  from `procurement_statistic` ps
+join actual_fluid af on (af.id=replace(ps.fluid_id,"-",""))
+join coordinate coor on (af.coordinate_id=coor.id)
+union all
+select unit_sum_price ,discounts_sum_price, waybill,active_tonnage,active_time,actual_fluid_name,province  from `procurement_statistic` ps
+join fluid on (fluid.id=replace(ps.fluid_id,"-",""))
+join `actual_fluid` af on (af.id=fluid.actual_fluid_id)
+join coordinate coor on (af.coordinate_id=coor.id)
+) pss
+group by actual_fluid_name ,province</string>
+		<string>select  sum(unit_sum_price), sum(discounts_sum_price),count(distinct waybill),sum(active_tonnage) ,actual_fluid_name,province,month(active_time)
+from (
+select unit_sum_price ,discounts_sum_price, waybill,active_tonnage,month(active_time),actual_fluid_name,province  from `procurement_statistic` ps
+join actual_fluid af on (af.id=replace(ps.fluid_id,"-",""))
+join coordinate coor on (af.coordinate_id=coor.id)
+union all
+select unit_sum_price ,discounts_sum_price, waybill,active_tonnage,month(active_time),actual_fluid_name,province  from `procurement_statistic` ps
+join fluid on (fluid.id=replace(ps.fluid_id,"-",""))
+join `actual_fluid` af on (af.id=fluid.actual_fluid_id)
+join coordinate coor on (af.coordinate_id=coor.id)
+) pss</string>
+		<string>select unit_sum_price ,discounts_sum_price, waybill,active_tonnage,month(active_time),actual_fluid_name,province  from `procurement_statistic` ps
+join actual_fluid af on (af.id=replace(ps.fluid_id,"-",""))
+join coordinate coor on (af.coordinate_id=coor.id)</string>
+		<string>select  sum(unit_sum_price), sum(discounts_sum_price),count(distinct waybill),sum(active_tonnage) ,actual_fluid_name,province,active_time
+from (
+select unit_sum_price ,discounts_sum_price, waybill,active_tonnage,active_time,actual_fluid_name,province  from `procurement_statistic` ps
+join actual_fluid af on (af.id=replace(ps.fluid_id,"-",""))
+join coordinate coor on (af.coordinate_id=coor.id)
+union all
+select unit_sum_price ,discounts_sum_price, waybill,active_tonnage,active_time,actual_fluid_name,province  from `procurement_statistic` ps
+join fluid on (fluid.id=replace(ps.fluid_id,"-",""))
+join `actual_fluid` af on (af.id=fluid.actual_fluid_id)
+join coordinate coor on (af.coordinate_id=coor.id)
+) pss
+group by actual_fluid_name ,province</string>
+		<string>select  sum(unit_sum_price), sum(discounts_sum_price),count(distinct waybill),sum(active_tonnage) ,actual_fluid_name,province,active_time
+from (
+select unit_sum_price ,discounts_sum_price, waybill,active_tonnage,active_time,actual_fluid_name,province  from `procurement_statistic` ps
+join actual_fluid af on (af.id=replace(ps.fluid_id,"-",""))
+join coordinate coor on (af.coordinate_id=coor.id)
+union all
+select unit_sum_price ,discounts_sum_price, waybill,active_tonnage,active_time,actual_fluid_name,province  from `procurement_statistic` ps
+join fluid on (fluid.id=replace(ps.fluid_id,"-",""))
+join `actual_fluid` af on (af.id=fluid.actual_fluid_id)
+join coordinate coor on (af.coordinate_id=coor.id)
+) pss</string>
+		<string>select  sum(unit_sum_price), sum(discounts_sum_price),count(distinct waybill),sum(active_tonnage) ,actual_fluid_name,province,
+from (
+select unit_sum_price ,discounts_sum_price, waybill,active_tonnage,active_time,actual_fluid_name,province  from `procurement_statistic` ps
+join actual_fluid af on (af.id=replace(ps.fluid_id,"-",""))
+join coordinate coor on (af.coordinate_id=coor.id)
+union all
+select unit_sum_price ,discounts_sum_price, waybill,active_tonnage,active_time,actual_fluid_name,province  from `procurement_statistic` ps
+join fluid on (fluid.id=replace(ps.fluid_id,"-",""))
+join `actual_fluid` af on (af.id=fluid.actual_fluid_id)
+join coordinate coor on (af.coordinate_id=coor.id)
+) pss</string>
+		<string>select unit_sum_price ,discounts_sum_price, waybill,active_tonnage,active_time,actual_fluid_name,province  from `procurement_statistic` ps
+join fluid on (fluid.id=replace(ps.fluid_id,"-",""))
+join `actual_fluid` af on (af.id=fluid.actual_fluid_id)
+join coordinate coor on (af.coordinate_id=coor.id)</string>
+		<string>select unit_sum_price ,discounts_sum_price, waybill,active_tonnage,active_time,actual_fluid_name,province  from `procurement_statistic` ps
+join actual_fluid af on (af.id=replace(ps.fluid_id,"-",""))
+join coordinate coor on (af.coordinate_id=coor.id)</string>
+		<string>select unit_sum_price ,discounts_sum_price,distinct waybill,active_tonnage,active_time,actual_fluid_name,province  from `procurement_statistic` ps
+join actual_fluid af on (af.id=replace(ps.fluid_id,"-",""))
+join coordinate coor on (af.coordinate_id=coor.id)</string>
+		<string>select  sum(unit_sum_price), sum(discounts_sum_price),count(distinct waybill),sum(active_tonnage) ,actual_fluid_name,province,ps.active_time
+from (
+select ps.* ,actual_fluid_name,province  from `procurement_statistic` ps
+join actual_fluid af on (af.id=replace(ps.fluid_id,"-",""))
+join coordinate coor on (af.coordinate_id=coor.id)
+union all
+select ps.*,actual_fluid_name,province from `procurement_statistic` ps
+join fluid on (fluid.id=replace(ps.fluid_id,"-",""))
+join `actual_fluid` af on (af.id=fluid.actual_fluid_id)
+join coordinate coor on (af.coordinate_id=coor.id)
+) pss
+group by actual_fluid_name ,province</string>
+		<string>select ps.* ,actual_fluid_name,province ,ps.active_time  from `procurement_statistic` ps
+join actual_fluid af on (af.id=replace(ps.fluid_id,"-",""))
+join coordinate coor on (af.coordinate_id=coor.id)</string>
+		<string>select  sum(unit_sum_price), sum(discounts_sum_price),count(distinct waybill),sum(active_tonnage) ,actual_fluid_name,province,ps.active_time
+from (
+select ps.* ,actual_fluid_name,province ,ps.active_time  from `procurement_statistic` ps
+join actual_fluid af on (af.id=replace(ps.fluid_id,"-",""))
+join coordinate coor on (af.coordinate_id=coor.id)
+union all
+select ps.*,actual_fluid_name,province,ps.active_time from `procurement_statistic` ps
+join fluid on (fluid.id=replace(ps.fluid_id,"-",""))
+join `actual_fluid` af on (af.id=fluid.actual_fluid_id)
+join coordinate coor on (af.coordinate_id=coor.id)
+) pss
+group by actual_fluid_name</string>
+		<string>select  sum(unit_sum_price), sum(discounts_sum_price),count(distinct waybill),sum(active_tonnage) ,actual_fluid_name,province,ps.active_time
+from (
+select ps.* ,actual_fluid_name,province ,ps.active_time from `procurement_statistic` ps
+join actual_fluid af on (af.id=replace(ps.fluid_id,"-",""))
+join coordinate coor on (af.coordinate_id=coor.id)
+union all
+select ps.*,actual_fluid_name,province,ps.active_time from `procurement_statistic` ps
+join fluid on (fluid.id=replace(ps.fluid_id,"-",""))
+join `actual_fluid` af on (af.id=fluid.actual_fluid_id)
+join coordinate coor on (af.coordinate_id=coor.id)
+) pss
+group by actual_fluid_name ,province</string>
+		<string>select  sum(unit_sum_price), sum(discounts_sum_price),count(distinct waybill),sum(active_tonnage) ,actual_fluid_name,province,ps.active_time
+from (
+select ps.* ,actual_fluid_name,province ,ps.active_time from `procurement_statistic` ps
+join actual_fluid af on (af.id=replace(ps.fluid_id,"-",""))
+join coordinate coor on (af.coordinate_id=coor.id)
+union all
+select ps.*,actual_fluid_name,province,ps.active_time from `procurement_statistic` ps
+join fluid on (fluid.id=replace(ps.fluid_id,"-",""))
+join `actual_fluid` af on (af.id=fluid.actual_fluid_id)
+join coordinate coor on (af.coordinate_id=coor.id)
+) ps
+group by actual_fluid_name ,province</string>
+		<string>select  sum(unit_sum_price), sum(discounts_sum_price),count(distinct waybill),sum(active_tonnage) ,actual_fluid_name,province,active_time
+from (
+select ps.* ,actual_fluid_name,province ,ps.active_time from `procurement_statistic` ps
+join actual_fluid af on (af.id=replace(ps.fluid_id,"-",""))
+join coordinate coor on (af.coordinate_id=coor.id)
+union all
+select ps.*,actual_fluid_name,province,ps.active_time from `procurement_statistic` ps
+join fluid on (fluid.id=replace(ps.fluid_id,"-",""))
+join `actual_fluid` af on (af.id=fluid.actual_fluid_id)
+join coordinate coor on (af.coordinate_id=coor.id)
+) ps
+group by actual_fluid_name ,province</string>
+		<string>select  sum(unit_sum_price), sum(discounts_sum_price),count(distinct waybill),sum(active_tonnage) ,actual_fluid_name,province,active_time
+from (
+select ps.* ,actual_fluid_name,province ,active_time from `procurement_statistic` ps
+join actual_fluid af on (af.id=replace(ps.fluid_id,"-",""))
+join coordinate coor on (af.coordinate_id=coor.id)
+union all
+select ps.*,actual_fluid_name,province,active_time from `procurement_statistic` ps
+join fluid on (fluid.id=replace(ps.fluid_id,"-",""))
+join `actual_fluid` af on (af.id=fluid.actual_fluid_id)
+join coordinate coor on (af.coordinate_id=coor.id)
+) ps
+group by actual_fluid_name ,province</string>
+	</array>
+	<key>rdbms_type</key>
+	<string>mysql</string>
+	<key>rdbms_version</key>
+	<string>5.7.15</string>
+	<key>version</key>
+	<integer>1</integer>
+</dict>
+</plist>
